@@ -18,6 +18,7 @@ export async function addProduct(data: ProductDataProps) {
         name: result.output.name,
         price: result.output.price,
       });
+      console.log(data);
     } else {
       throw new Error("Invalid data");
     }
