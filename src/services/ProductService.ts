@@ -96,3 +96,12 @@ export async function deleteProduct(id: Product["id"]) {
     console.error(error);
   }
 }
+
+export async function updateAvailability(id: Product["id"]) {
+  try {
+    const url = `${import.meta.env.VITE_URL_API}/api/products/${id}`;
+    await axios.patch(url);
+  } catch (error) {
+    console.error(error);
+  }
+}
