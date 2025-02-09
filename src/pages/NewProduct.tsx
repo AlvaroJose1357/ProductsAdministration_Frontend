@@ -3,6 +3,7 @@ import {
   Form,
   Link,
   useActionData,
+  redirect,
 } from "react-router-dom";
 import ErrorMessage from "../components/ErrorMessage";
 import { addProduct } from "../services/ProductService";
@@ -20,16 +21,10 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // Add product
-  addProduct(data);
+  await addProduct(data);
 
-  // if (request.method === "POST") {
-  //   const body = JSON.parse(request.body);
-  //   console.log(body);
-  // }
-  // return {
-  //   title: "Registrar Producto",
-  //   component: <NewProduct />,
-  // };
+  // Redirect to products
+  return redirect("/");
 }
 
 export default function NewProduct() {
