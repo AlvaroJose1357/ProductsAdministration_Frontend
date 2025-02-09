@@ -1,12 +1,4 @@
-import {
-  boolean,
-  number,
-  parse,
-  pipe,
-  safeParse,
-  string,
-  transform,
-} from "valibot";
+import { number, parse, pipe, safeParse, string, transform } from "valibot";
 import {
   DraftProductSchema,
   ProductSchema,
@@ -95,3 +87,12 @@ export const updateProduct = async (
     console.error(error);
   }
 };
+
+export async function deleteProduct(id: Product["id"]) {
+  try {
+    const url = `${import.meta.env.VITE_URL_API}/api/products/${id}`;
+    await axios.delete(url);
+  } catch (error) {
+    console.error(error);
+  }
+}

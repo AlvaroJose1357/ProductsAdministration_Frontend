@@ -1,10 +1,25 @@
-import { Link, useNavigate } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  Link,
+  redirect,
+  useNavigate,
+} from "react-router-dom";
 import { Product } from "../types";
 import { formatCurrency } from "../utils";
+import { deleteProduct } from "../services/ProductService";
 
 type ProductDetailProps = {
   product: Product;
 };
+
+export async function action({ params }: ActionFunctionArgs) {
+  if (params.id !== undefined) {
+    await deleteProduct(+params.id);
+    // Redirect to products
+    return redirect("/");
+  }
+}
 export default function ProductDetail({ product }: ProductDetailProps) {
   const navigate = useNavigate();
   const isAvailable = product.availability;
@@ -29,9 +44,21 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             className="bg-indigo-600 text-white rounded-xl w-full p-2 uppercase font-bold text-xs text-center">
             Editar
           </button>
-          <button className="bg-red-500 text-white rounded-xl w-full p-2 uppercase font-bold text-xs text-center">
-            Eliminar
-          </button>
+          <Form
+            className="w-full"
+            method="POST"
+            // se coloca este action ya que no existe una ruta para eliminar productos entonces se hace directamente desde los componentes
+            action={`products/${product.id}/delete`}
+            // este onSubmit se coloca para que se muestre un mensaje de confirmación antes de eliminar el producto, se ejecuta antes del action
+            onSubmit={(event) => {
+              if (!confirm("¿Estás seguro de eliminar este producto?")) {
+                event.preventDefault();
+              }
+            }}>
+            <button className="bg-red-500 text-white rounded-xl w-full p-2 uppercase font-bold text-xs text-center">
+              Eliminar
+            </button>
+          </Form>
         </div>
       </td>
     </tr>
