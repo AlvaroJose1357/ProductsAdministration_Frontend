@@ -1,6 +1,11 @@
 import { safeParse } from "valibot";
-import { DraftProductSchema, ProductsSchema } from "../schemas/product-schema";
+import {
+  DraftProductSchema,
+  ProductSchema,
+  ProductsSchema,
+} from "../schemas/product-schema";
 import axios from "axios";
+import { Product } from "../types";
 
 type ProductDataProps = {
   [k: string]: FormDataEntryValue;
@@ -33,6 +38,20 @@ export async function getProducts() {
     const url = `${import.meta.env.VITE_URL_API}/api/products`;
     const { data } = await axios.get(url);
     const result = safeParse(ProductsSchema, data.data);
+    if (result.success) {
+      return result.output;
+    } else {
+      throw new Error("Invalid data");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+export async function getProductByID(id: Product["id"]) {
+  try {
+    const url = `${import.meta.env.VITE_URL_API}/api/products/${id}`;
+    const { data } = await axios.get(url);
+    const result = safeParse(ProductSchema, data.data);
     if (result.success) {
       return result.output;
     } else {
